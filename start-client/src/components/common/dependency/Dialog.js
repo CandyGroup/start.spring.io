@@ -1,16 +1,16 @@
 import * as JsSearch from 'js-search'
 import PropTypes from 'prop-types'
 import get from 'lodash.get'
-import React, { useContext, useEffect, useRef, useState } from 'react'
-import { CSSTransition, TransitionGroup } from 'react-transition-group'
-import { clearAllBodyScrollLocks, disableBodyScroll } from 'body-scroll-lock'
+import React, {useContext, useEffect, useRef, useState} from 'react'
+import {CSSTransition, TransitionGroup} from 'react-transition-group'
+import {clearAllBodyScrollLocks, disableBodyScroll} from 'body-scroll-lock'
 
 import Item from './Item'
 import useWindowsUtils from '../../utils/WindowsUtils'
-import { AppContext } from '../../reducer/App'
-import { IconTimes } from '../icons'
-import { InitializrContext } from '../../reducer/Initializr'
-import { Overlay } from '../form'
+import {AppContext} from '../../reducer/App'
+import {IconTimes} from '../icons'
+import {InitializrContext} from '../../reducer/Initializr'
+import {Overlay} from '../form'
 
 const sortResult = dependencies => {
   return dependencies.sort((a, b) => {
@@ -154,7 +154,7 @@ function Dialog({ onClose }) {
       case 40: // Down
         event.preventDefault()
         setSelected(
-          Math.min(selected + 1, result.length - 1, result.length - 1)
+            selected === result.length - 1 ? 0 : selected + 1
         )
         setTimeout(() => {
           updateScroll()
@@ -162,7 +162,7 @@ function Dialog({ onClose }) {
         break
       case 38: // Up
         event.preventDefault()
-        setSelected(Math.max(selected - 1, 0))
+        setSelected(selected === 0 ? result.length - 1 : selected - 1)
         setTimeout(() => {
           updateScroll()
         })

@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types'
 import get from 'lodash.get'
 import set from 'lodash.set'
-import React, { useReducer } from 'react'
+import React, {useReducer} from 'react'
 
-import { getShareUrl, parseParams } from '../utils/ApiUtils'
+import {getShareUrl, parseParams} from '../utils/ApiUtils'
 
 export const defaultInitializrContext = {
   values: {
@@ -18,6 +18,7 @@ export const defaultInitializrContext = {
       packaging: '',
       packageName: '',
       java: '',
+      ddl: ''
     },
     dependencies: [],
   },

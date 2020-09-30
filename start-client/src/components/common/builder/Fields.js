@@ -1,48 +1,49 @@
 import PropTypes from 'prop-types'
 import get from 'lodash.get'
-import React, { useContext } from 'react'
+import React, {useContext} from 'react'
 
 import Actions from './Actions'
 import Control from './Control'
 import FieldError from './FieldError'
 import FieldInput from './FieldInput'
+import FieldTextArea from './FieldTextArea'
 import FieldRadio from './FieldRadio'
 import Warnings from './Warnings'
 import useWindowsUtils from '../../utils/WindowsUtils'
-import { AppContext } from '../../reducer/App'
-import { Button, Radio } from '../form'
-import { Dependency } from '../dependency'
-import { InitializrContext } from '../../reducer/Initializr'
+import {AppContext} from '../../reducer/App'
+import {Button, Radio} from '../form'
+import {Dependency} from '../dependency'
+import {InitializrContext} from '../../reducer/Initializr'
 
 const Fields = ({
-  onSubmit,
-  onExplore,
-  onShare,
-  refExplore,
-  refSubmit,
-  refDependency,
-  generating,
-}) => {
-  const windowsUtils = useWindowsUtils()
-  const { config, dispatch, dependencies } = useContext(AppContext)
-  const { values, dispatch: dispatchInitializr, errors } = useContext(
-    InitializrContext
-  )
-  const update = args => {
-    dispatchInitializr({ type: 'UPDATE', payload: args })
-  }
+                    onSubmit,
+                    onExplore,
+                    onShare,
+                    refExplore,
+                    refSubmit,
+                    refDependency,
+                    generating,
+                }) => {
+    const windowsUtils = useWindowsUtils()
+    const {config, dispatch, dependencies} = useContext(AppContext)
+    const {values, dispatch: dispatchInitializr, errors} = useContext(
+        InitializrContext
+    )
+    const update = args => {
+        dispatchInitializr({type: 'UPDATE', payload: args})
+    }
 
-  return (
-    <>
-      <div className='colset colset-main'>
-        <div className='left'>
-          <Warnings />
-          <div className='col-sticky'>
-            <div className='colset'>
-              <div className='left'>
-                <Control text='Project'>
-                  <Radio
-                    name='project'
+    return (
+        <>
+            <div className='colset colset-main'>
+                <div className='left'>
+                    <Warnings/>
+                    <div className='col-sticky'>
+                        <div className='colset'>
+                            <div className='left'>
+                                <Control text='Project'>
+                                    <Radio
+                                        name='project'
                     selected={get(values, 'project')}
                     options={get(config, 'lists.project')}
                     onChange={value => {
@@ -123,32 +124,40 @@ const Fields = ({
                   update({ meta: { description: event.target.value } })
                 }}
               />
-              <FieldInput
-                id='input-packageName'
-                value={get(values, 'meta.packageName')}
-                text='Package name'
-                onChange={event => {
-                  update({ meta: { packageName: event.target.value } })
-                }}
-              />
-              <FieldRadio
-                id='input-packaging'
-                value={get(values, 'meta.packaging')}
-                text='Packaging'
-                options={get(config, 'lists.meta.packaging')}
-                onChange={value => {
-                  update({ meta: { packaging: value } })
-                }}
-              />
-              <FieldRadio
-                id='input-java'
-                value={get(values, 'meta.java')}
-                text='Java'
-                options={get(config, 'lists.meta.java')}
-                onChange={value => {
-                  update({ meta: { java: value } })
-                }}
-              />
+                <FieldInput
+                    id='input-packageName'
+                    value={get(values, 'meta.packageName')}
+                    text='Package name'
+                    onChange={event => {
+                        update({meta: {packageName: event.target.value}})
+                    }}
+                />
+                <FieldRadio
+                    id='input-packaging'
+                    value={get(values, 'meta.packaging')}
+                    text='Packaging'
+                    options={get(config, 'lists.meta.packaging')}
+                    onChange={value => {
+                        update({meta: {packaging: value}})
+                    }}
+                />
+                <FieldRadio
+                    id='input-java'
+                    value={get(values, 'meta.java')}
+                    text='Java'
+                    options={get(config, 'lists.meta.java')}
+                    onChange={value => {
+                        update({meta: {java: value}})
+                    }}
+                />
+                <FieldTextArea
+                    id='input-ddl'
+                    value={get(values, 'meta.ddl')}
+                    text='DDL'
+                    onChange={event => {
+                        update({meta: {ddl: event.target.value}})
+                    }}
+                />
             </Control>
           </div>
         </div>

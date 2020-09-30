@@ -18,15 +18,28 @@ package io.spring.start.site.extension.dependency;
 
 import io.spring.initializr.generator.buildsystem.gradle.GradleBuildSystem;
 import io.spring.initializr.generator.condition.ConditionalOnBuildSystem;
+import io.spring.initializr.generator.condition.ConditionalOnLanguage;
 import io.spring.initializr.generator.condition.ConditionalOnRequestedDependency;
+import io.spring.initializr.generator.io.IndentingWriterFactory;
+import io.spring.initializr.generator.io.SimpleIndentStrategy;
 import io.spring.initializr.generator.io.template.MustacheTemplateRenderer;
+import io.spring.initializr.generator.language.Annotation;
+import io.spring.initializr.generator.language.TypeDeclaration;
+import io.spring.initializr.generator.language.java.JavaLanguage;
+import io.spring.initializr.generator.project.ProjectDescription;
 import io.spring.initializr.generator.project.ProjectGenerationConfiguration;
 import io.spring.initializr.generator.spring.build.gradle.ConditionalOnGradleVersion;
+import io.spring.initializr.generator.spring.code.MainApplicationTypeCustomizer;
 import io.spring.initializr.metadata.InitializrMetadata;
+import io.spring.start.site.extension.build.maven.MavenProjectPropertyCustomizer;
+import io.spring.start.site.extension.ddl.DDLProjectDescription;
+import io.spring.start.site.extension.dependency.fastjson.FastJsonBuildCustomizer;
 import io.spring.start.site.extension.dependency.flyway.FlywayProjectContributor;
 import io.spring.start.site.extension.dependency.liquibase.LiquibaseProjectContributor;
 import io.spring.start.site.extension.dependency.lombok.LombokGradleBuildCustomizer;
+import io.spring.start.site.extension.dependency.mybatisplus.MyBatisPlusSourceCodeContributor;
 import io.spring.start.site.extension.dependency.okta.OktaHelpDocumentCustomizer;
+import io.spring.start.site.extension.dependency.prometheus.PrometheusBuildCustomizer;
 import io.spring.start.site.extension.dependency.reactor.ReactorTestBuildCustomizer;
 import io.spring.start.site.extension.dependency.springbatch.SpringBatchTestBuildCustomizer;
 import io.spring.start.site.extension.dependency.springkafka.SpringKafkaBuildCustomizer;
@@ -34,7 +47,9 @@ import io.spring.start.site.extension.dependency.springsecurity.SpringSecurityRS
 import io.spring.start.site.extension.dependency.springsecurity.SpringSecurityTestBuildCustomizer;
 import io.spring.start.site.extension.dependency.springsession.SpringSessionBuildCustomizer;
 import io.spring.start.site.extension.dependency.thymeleaf.ThymeleafBuildCustomizer;
-
+import io.spring.start.site.project.ApplicationYamlContributor;
+import io.spring.start.site.project.DockerfileContributor;
+import io.spring.start.site.project.ProjectMetaFileContributor;
 import org.springframework.context.annotation.Bean;
 
 /**
@@ -120,4 +135,54 @@ public class DependencyProjectGenerationConfiguration {
 		return new OktaHelpDocumentCustomizer(templateRenderer);
 	}
 
+	@Bean
+	public IndentingWriterFactory indentingWriterFactory() {
+		return IndentingWriterFactory.create(new SimpleIndentStrategy("    "));
+	}
+
+	@Bean
+	public ProjectMetaFileContributor projectConfigFileContributor() {
+		return new ProjectMetaFileContributor();
+	}
+
+	@Bean
+	@ConditionalOnRequestedDependency("mybatis-plus")
+	public FastJsonBuildCustomizer fastJsonBuildCustomizer() {
+		return new FastJsonBuildCustomizer();
+	}
+
+	@Bean
+	@ConditionalOnRequestedDependency("actuator")
+	public PrometheusBuildCustomizer prometheusBuildCustomizer() {
+		return new PrometheusBuildCustomizer();
+	}
+
+	@Bean
+	public MavenProjectPropertyCustomizer mavenProjectPropertyCustomizer() {
+		return new MavenProjectPropertyCustomizer();
+	}
+
+	@Bean
+	public ApplicationYamlContributor applicationYamlContributor(ProjectDescription projectDescription) {
+		return new ApplicationYamlContributor(projectDescription);
+	}
+
+	@Bean
+	public DockerfileContributor dockerfileContributor(ProjectDescription projectDescription) {
+		return new DockerfileContributor(projectDescription);
+	}
+
+	@Bean
+	@ConditionalOnLanguage(JavaLanguage.ID)
+	@ConditionalOnRequestedDependency("mybatis-plus")
+	public MyBatisPlusSourceCodeContributor ddlSourceCodeContributor(DDLProjectDescription projectDescription) {
+		return new MyBatisPlusSourceCodeContributor(projectDescription);
+	}
+
+	@Bean
+	@ConditionalOnRequestedDependency("mybatis-plus")
+	public MainApplicationTypeCustomizer<TypeDeclaration> mapperScanAnnotator(ProjectDescription projectDescription) {
+		return (typeDeclaration) -> typeDeclaration
+				.annotate(Annotation.name("org.mybatis.spring.annotation.MapperScan", b -> b.attribute("value", String.class, projectDescription.getPackageName() + ".mapper")));
+	}
 }

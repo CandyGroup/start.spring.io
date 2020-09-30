@@ -11,6 +11,7 @@ server:
   error:
     include-message: always
   forward-headers-strategy: native
+  max-http-header-size: 64KB
 
 spring:
   jackson:
@@ -228,6 +229,12 @@ initializr:
           links:
             - rel: reference
               href: https://docs.spring.io/spring-boot/docs/{bootVersion}/reference/htmlsingle/#configuration-metadata-annotation-processor
+        - name: FastJSON
+          id: fastjson
+          description: Fastjson is a JSON processor (JSON parser + JSON generator) written in Java.
+          groupId: com.alibaba
+          artifactId: fastjson
+          version: 1.2.76
     - name: Web
       content:
         - name: Spring Web
@@ -503,6 +510,12 @@ initializr:
           mappings:
             - compatibilityRange: "[2.1.0.RELEASE,2.5.0-M1)"
               version: 2.1.4
+        - name: MyBatis-Plus
+          id: mybatis-plus
+          description: An enhanced toolkit of Mybatis to simplify development.
+          groupId: com.baomidou
+          artifactId: mybatis-plus-boot-starter
+          version: 3.4.2
         - name: Liquibase Migration
           id: liquibase
           description: Liquibase database migration and source control library.
@@ -604,7 +617,13 @@ initializr:
             - native
           groupId: org.postgresql
           artifactId: postgresql
-          scope: runtime
+          starter: false
+        - name: ClickHouse Driver
+          id: clickhouse
+          description: A JDBC driver that allows Java programs to connect to a ClickHouse database using standard, database independent Java code.
+          groupId: ru.yandex.clickhouse
+          artifactId: clickhouse-jdbc
+          version: 0.3.0
           starter: false
     - name: NoSQL
       content:
@@ -868,6 +887,12 @@ initializr:
         - name: Quartz Scheduler
           id: quartz
           description: Schedule jobs using Quartz.
+        - name: XXL JOB
+          id: xxl-job
+          description: A distributed task scheduling framework.
+          groupId: com.xuxueli
+          artifactId: xxl-job-core
+          version: 2.3.0
         - name: Spring cache abstraction
           id: cache
           description: Provides cache-related operations, such as the ability to update the content of the cache, but does not provide the actual data store.

@@ -3,7 +3,7 @@ import querystring from 'querystring'
 import set from 'lodash.set'
 
 import Extend from '../../Extend.json'
-import { isInRange, parseReleases, parseVersion } from './Version'
+import {isInRange, parseReleases, parseVersion} from './Version'
 
 const PROPERTIES_MAPPING_URL = {
   type: 'project',
@@ -243,8 +243,9 @@ export const getDefaultValues = json => {
       packaging: get(json, 'packaging.default'),
       packageName: get(json, 'packageName.default'),
       java: get(json, 'javaVersion.default'),
+      ddl: get(json, 'ddl.default') || '',
     },
-    dependencies: [],
+    dependencies: ['web', 'actuator', 'mybatis-plus', 'configuration-processor', 'postgresql', 'fastjson', 'lombok'],
   }
 }
 
@@ -278,6 +279,7 @@ export const getProject = function getProject(url, values, config) {
       packageName: get(values, 'meta.packageName'),
       packaging: get(values, 'meta.packaging'),
       javaVersion: get(values, 'meta.java'),
+      ddl: get(values, 'meta.ddl'),
     })
     let paramsDependencies = get(values, 'dependencies', [])
       .map(dependency => {

@@ -358,6 +358,7 @@ describe('getProject', () => {
         name: 'foo8',
         description: 'foo9',
         packageName: 'foo10',
+        ddl: 'foo11'
       },
       dependencies: ['foo11', 'foo12'],
     }
@@ -367,7 +368,7 @@ describe('getProject', () => {
     ])
     expect(fetch.mock.calls.length).toEqual(1)
     expect(fetch.mock.calls[0][0]).toEqual(
-      'http://demo/starter.zip?type=foo1&language=foo2&bootVersion=foo3&baseDir=foo7&groupId=foo6&artifactId=foo7&name=foo8&description=foo9&packageName=foo10&packaging=foo4&javaVersion=foo5&dependencies=foo11,foo12'
+        'http://demo/starter.zip?type=foo1&language=foo2&bootVersion=foo3&baseDir=foo7&groupId=foo6&artifactId=foo7&name=foo8&description=foo9&packageName=foo10&packaging=foo4&javaVersion=foo5&ddl=foo11&dependencies=foo11,foo12'
     )
   })
 
@@ -384,13 +385,14 @@ describe('getProject', () => {
         name: 'foo8',
         description: 'foo9',
         packageName: 'foo10',
+        ddl: 'foo11',
       },
       dependencies: ['foo11', 'foo12'],
     }
     getProject('http://demo/starter.zip', values, [{ id: 'foo11' }])
     expect(fetch.mock.calls.length).toEqual(1)
     expect(fetch.mock.calls[0][0]).toEqual(
-      'http://demo/starter.zip?type=foo1&language=foo2&bootVersion=foo3&baseDir=foo7&groupId=foo6&artifactId=foo7&name=foo8&description=foo9&packageName=foo10&packaging=foo4&javaVersion=foo5&dependencies=foo11'
+        'http://demo/starter.zip?type=foo1&language=foo2&bootVersion=foo3&baseDir=foo7&groupId=foo6&artifactId=foo7&name=foo8&description=foo9&packageName=foo10&packaging=foo4&javaVersion=foo5&ddl=foo11&dependencies=foo11'
     )
   })
 
@@ -407,12 +409,13 @@ describe('getProject', () => {
         name: 'foo8',
         description: 'foo9',
         packageName: 'foo10',
+        ddl: 'foo11'
       },
     }
     getProject('http://demo/starter.zip', values, [])
     expect(fetch.mock.calls.length).toEqual(1)
     expect(fetch.mock.calls[0][0]).toEqual(
-      'http://demo/starter.zip?type=foo1&language=foo2&bootVersion=foo3&baseDir=foo7&groupId=foo6&artifactId=foo7&name=foo8&description=foo9&packageName=foo10&packaging=foo4&javaVersion=foo5'
+        'http://demo/starter.zip?type=foo1&language=foo2&bootVersion=foo3&baseDir=foo7&groupId=foo6&artifactId=foo7&name=foo8&description=foo9&packageName=foo10&packaging=foo4&javaVersion=foo5&ddl=foo11'
     )
   })
 })
